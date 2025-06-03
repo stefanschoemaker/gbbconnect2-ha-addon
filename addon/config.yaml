@@ -37,10 +37,6 @@ options:
   is_driver_log2: true
 
 schema:
-  server_autostart: "bool"
-  is_verbose_log: "bool"
-  is_driver_log: "bool"
-  is_driver_log2: "bool"
   plant_version: "int"
   plant_number: "int"
   plant_name: "str(0,64)"
@@ -53,4 +49,8 @@ schema:
   gbboptimizer_plant_token: "str(0,64)"
   gbboptimizer_mqtt_address: "str(0,128)"
   gbboptimizer_mqtt_port: "int"
+  server_autostart: "bool"
+  is_verbose_log: "bool"
+  is_driver_log: "bool"
+  is_driver_log2: "bool"
 host_network: false
