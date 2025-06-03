@@ -18,7 +18,6 @@ map:
 - "config"
 
 options:
-  # Nested <Plant> attributes
   plant_version: 1
   plant_number: 1
   plant_name: "Any text"
@@ -31,6 +30,7 @@ options:
   gbboptimizer_plant_token: "PlantToken"
   gbboptimizer_mqtt_address: "gbboptimizerX-mqtt.gbbsoft.pl"
   gbboptimizer_mqtt_port: 8883
+
   server_autostart: true
   is_verbose_log: true
   is_driver_log: true
@@ -49,8 +49,8 @@ schema:
   gbboptimizer_plant_token: "str(0,64)"
   gbboptimizer_mqtt_address: "str(0,128)"
   gbboptimizer_mqtt_port: "int"
+
   server_autostart: "bool"
   is_verbose_log: "bool"
   is_driver_log: "bool"
   is_driver_log2: "bool"
-host_network: false
