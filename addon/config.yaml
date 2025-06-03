@@ -1,0 +1,19 @@
+name: "GbbConnect2"
+version: "0.0.1"
+slug: "gbbconnect2"
+description: "GbbConnect2 Home Assistant add-on: runs the GbbConnect2Console .NET app in Docker and allows you to supply a Parameters.xml"
+url: "https://github.com/gbbsoft/GbbConnect2"
+startup: "services"
+boot: "auto"
+arch:
+  - "amd64"
+  - "armv7"
+  - "aarch64"
+map:
+  - "config"
+options:
+  parameters_xml: |
+    <!-- Paste your Parameters.xml contents here -->
+schema:
+  parameters_xml: "str"
+host_network: false
