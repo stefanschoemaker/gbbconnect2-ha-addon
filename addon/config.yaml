@@ -1,19 +1,56 @@
 name: "GbbConnect2"
-version: "0.0.1"
+version: "0.0.5"
 slug: "gbbconnect2"
-description: "GbbConnect2 Home Assistant add-on: runs the GbbConnect2Console .NET app in Docker and allows you to supply a Parameters.xml"
+description: >
+  GbbConnect2 Home Assistant add-on: runs the GbbConnect2Console .NET app in Docker and allows you to generate a Parameters.xml
 url: "https://github.com/gbbsoft/GbbConnect2"
 startup: "services"
 boot: "auto"
+
 arch:
-  - "amd64"
-  - "armv7"
-  - "aarch64"
+- "amd64"
+- "armv7"
+- "aarch64"
+- "i386"
+- "armhf"
+
 map:
-  - "config"
+- "config"
+
 options:
-  parameters_xml: |
-    <!-- Paste your Parameters.xml contents here -->
+  # Nested <Plant> attributes
+  plant_version: 1
+  plant_number: 1
+  plant_name: "Any text"
+  plant_driver_no: 0
+  plant_is_disabled: false
+  plant_address_ip: "1.2.3.4"
+  plant_port_no: 8899
+  plant_serial_number: "123456"
+  gbboptimizer_plant_id: "PlantId"
+  gbboptimizer_plant_token: "PlantToken"
+  gbboptimizer_mqtt_address: "gbboptimizerX-mqtt.gbbsoft.pl"
+  gbboptimizer_mqtt_port: 8883
+  server_autostart: true
+  is_verbose_log: true
+  is_driver_log: true
+  is_driver_log2: true
+
 schema:
-  parameters_xml: "str"
+  server_autostart: "bool"
+  is_verbose_log: "bool"
+  is_driver_log: "bool"
+  is_driver_log2: "bool"
+  plant_version: "int"
+  plant_number: "int"
+  plant_name: "str(0,64)"
+  plant_driver_no: "int"
+  plant_is_disabled: "bool"
+  plant_address_ip: "str(0,64)"
+  plant_port_no: "int"
+  plant_serial_number: "str(0,64)"
+  gbboptimizer_plant_id: "str(0,64)"
+  gbboptimizer_plant_token: "str(0,64)"
+  gbboptimizer_mqtt_address: "str(0,128)"
+  gbboptimizer_mqtt_port: "int"
 host_network: false
