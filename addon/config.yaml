@@ -8,14 +8,14 @@ startup: "services"
 boot: "auto"
 
 arch:
-- "amd64"
-- "armv7"
-- "aarch64"
-- "i386"
-- "armhf"
+  - "amd64"
+  - "armv7"
+  - "aarch64"
+  - "i386"
+  - "armhf"
 
 map:
-- "config"
+  - "config"
 
 options:
   plant_version: 1
