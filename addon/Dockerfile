@@ -54,5 +54,10 @@ LABEL io.hass.arch="armhf|armv7|aarch64|amd64|i386"
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Run the .NET console app
-ENTRYPOINT ["dotnet", "GbbConnect2Console.dll"]
+# Copy data for add-on
+# Copy data for add-on
+COPY run.sh /
+RUN chmod a+x /run.sh
+
+# Run run.sh script on container start
+CMD [ "/run.sh" ]
