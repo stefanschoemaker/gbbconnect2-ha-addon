@@ -9,7 +9,6 @@ mkdir -p /app/GbbConnect2
   echo '<?xml version="1.0" encoding="utf-8"?>'
   printf '<Parameters Version="1"'
 
-  # Top‐level boolean flags (always present, emit "1" or "0")
   if bashio::config.true 'server_autostart'; then
     printf ' Server_AutoStart="1"'
   else
@@ -36,7 +35,6 @@ mkdir -p /app/GbbConnect2
 
   echo '>'
 
-  # <Plant> element (all values are mandatory, so we fetch them directly)
   printf '  <Plant Version="1"'
   printf ' Number="1"'
   printf ' Name="%s"'              "$(bashio::config 'plant_name')"
@@ -62,7 +60,10 @@ bashio::log.info "Wrote /app/GbbConnect2/Parameters.xml successfully."
 
 bashio::log.info "—— Parameters.xml contents ——"
 while IFS= read -r line; do
-  bashio::log.info "$line"
+  # Replace the GbbOptimizer_PlantToken value with asterisks for security
+  # This is to avoid logging sensitive information in the logs
+  masked=$(echo "$line" | sed 's/GbbOptimizer_PlantToken="[^"]*"/GbbOptimizer_PlantToken="*******"/')
+  bashio::log.info "$masked"
 done < /app/GbbConnect2/Parameters.xml
 bashio::log.info "—— End Parameters.xml ——"
 

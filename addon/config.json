@@ -1,6 +1,6 @@
 {
   "name": "GbbConnect2",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "slug": "gbbconnect2",
   "description": "GbbConnect2 Home Assistant add-on: runs the GbbConnect2Console .NET app in Docker and allows you to generate a Parameters.xml",
   "url": "https://github.com/gbbsoft/GbbConnect2",
@@ -47,7 +47,7 @@
     "plant_port_no":        "int",
     "plant_serial_number":  "str",
     "gbboptimizer_plant_id":      "str",
-    "gbboptimizer_plant_token":   "str",
+    "gbboptimizer_plant_token":   "password",
     "gbboptimizer_mqtt_address":  "str",
     "gbboptimizer_mqtt_port":     "int",
 
