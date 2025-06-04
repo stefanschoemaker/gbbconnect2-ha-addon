@@ -4,14 +4,15 @@
 ARG BUILD_FROM
 FROM $BUILD_FROM AS base
 
-# Enable edge/community for dotnet9-runtime
-RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories \
+# Enable edge/community (for dotnet9-runtime)
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" \
+      >> /etc/apk/repositories \
     && apk update \
     && apk add --no-cache \
-    dotnet9-runtime \
-    tzdata \
-    libc6-compat \
-    ca-certificates \
+       dotnet9-runtime \
+       tzdata \
+       libc6-compat \
+       ca-certificates \
     && update-ca-certificates
 
 # (Optional) Set timezone if your app needs it
@@ -20,18 +21,23 @@ ENV TZ=UTC
 WORKDIR /app
 
 ###############################################################################
-# 2) Build stage: compile the .NET console app with the official SDK
+# 2) Build stage: clone GbbConnect2 from GitHub and compile the .NET console app
+#    (using Alpine‐based .NET SDK)
 ###############################################################################
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /src
 
-# Copy csproj and restore
-COPY ["GbbConnect2Console/GbbConnect2Console.csproj", "GbbConnect2Console/"]
-RUN dotnet restore "GbbConnect2Console/GbbConnect2Console.csproj"
+# 2a) Install git so we can pull the repo
+RUN apk add --no-cache git
 
-# Copy the rest of your source and build
-COPY . .
-WORKDIR "/src/GbbConnect2Console"
+# 2b) Clone only the latest commit of GbbConnect2 (depth=1) to save time
+RUN git clone --depth 1 https://github.com/gbbsoft/GbbConnect2.git .
+
+# 2c) Restore NuGet packages for the console subproject
+WORKDIR /src/GbbConnect2Console
+RUN dotnet restore "GbbConnect2Console.csproj"
+
+# 2d) Build in Release mode; output goes to /app/build in the SDK container
 RUN dotnet build "GbbConnect2Console.csproj" -c Release -o /app/build
 
 ###############################################################################
@@ -54,10 +60,10 @@ LABEL io.hass.arch="armhf|armv7|aarch64|amd64|i386"
 WORKDIR /app
 COPY --from=publish /app/publish .
 
-# Copy data for add-on
-# Copy data for add-on
-COPY run.sh /
-RUN chmod a+x /run.sh
+# 4c) Copy run.sh into the image root, make it executable
+COPY run.sh /run.sh
+RUN chmod +x /run.sh
 
-# Run run.sh script on container start
-CMD [ "/run.sh" ]
+# 4d) Use s6’s /init as entrypoint, then run.sh as CMD
+ENTRYPOINT ["/init"]
+CMD ["/run.sh"]

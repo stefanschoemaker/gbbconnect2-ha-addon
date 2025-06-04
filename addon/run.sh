@@ -1,7 +1,9 @@
 #!/usr/bin/with-contenv bashio
 set -e
 
-bashio::log.info "Generating /app/Parameters.xml from add-on options…"
+bashio::log.info "Generating /app/GbbConnect2/Parameters.xml from add-on options…"
+
+mkdir -p /app/GbbConnect2
 
 {
   echo '<?xml version="1.0" encoding="utf-8"?>'
@@ -36,7 +38,7 @@ bashio::log.info "Generating /app/Parameters.xml from add-on options…"
 
   # <Plant> element (all values are mandatory, so we fetch them directly)
   printf '  <Plant Version="1"'
-  printf ' Number="%s"'            "$(bashio::config 'plant_number')"
+  printf ' Number="1"'
   printf ' Name="%s"'              "$(bashio::config 'plant_name')"
   printf ' DriverNo="%s"'          "$(bashio::config 'plant_driver_no')"
   if bashio::config.true 'plant_is_disabled'; then
@@ -54,15 +56,17 @@ bashio::log.info "Generating /app/Parameters.xml from add-on options…"
 
   echo ' />'
   echo '</Parameters>'
-} > /app/Parameters.xml
+} > /app/GbbConnect2/Parameters.xml
 
-bashio::log.info "Wrote /app/Parameters.xml successfully."
+bashio::log.info "Wrote /app/GbbConnect2/Parameters.xml successfully."
 
 bashio::log.info "—— Parameters.xml contents ——"
 while IFS= read -r line; do
   bashio::log.info "$line"
-done < /app/Parameters.xml
+done < /app/GbbConnect2/Parameters.xml
 bashio::log.info "—— End Parameters.xml ——"
 
 bashio::log.info "Launching dotnet GbbConnect2Console.dll…"
-exec dotnet GbbConnect2Console.dll
+dotnet /app/GbbConnect2Console.dll --dont-wait-for-key
+bashio::log.info "GbbConnect2Console.dll exited."
+bashio::log.info "Exiting add-on."
